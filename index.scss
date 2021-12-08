@@ -1,0 +1,77 @@
+    body {
+        background-image: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+    }
+    
+    .title {
+        h2 {
+            color: white;
+            text-align: center;
+            margin: 0;
+            font-size: 50px;
+        }
+        margin-top: 3rem;
+    }
+    
+    .main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 80px;
+        gap: 15px;
+        div {
+            display: flex;
+            gap: 15px;
+        }
+        button {
+            height: 115px;
+            width: 131px;
+            border: none;
+            background-color: rgb(65, 70, 114);
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
+    }
+    
+    .player-selection {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 150px;
+        h2 {
+            color: white;
+            transition: 0s !important;
+        }
+        div {
+            div {
+                display: flex;
+                gap: 50px;
+                .active {
+                    border-bottom: 2px solid red;
+                }
+            }
+            p {
+                color: white;
+                font-size: 20px;
+                border: none;
+            }
+        }
+    }
+    
+    .start {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 3rem;
+        button {
+            width: 300px;
+            height: 50px;
+            border: none;
+            background-color: rgb(79, 151, 192);
+            cursor: pointer;
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
+    }
