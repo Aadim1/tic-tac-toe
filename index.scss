@@ -28,6 +28,8 @@
             width: 131px;
             border: none;
             background-color: rgb(65, 70, 114);
+            color: whitesmoke;
+            font-size: 40px;
             &:hover {
                 transform: scale(1.1);
             }
@@ -74,4 +76,42 @@
                 transform: scale(1.1);
             }
         }
+    }
+    
+    .show {
+        display: inherit;
+    }
+    
+    .hide {
+        display: none;
+    }
+    
+    .whose-turn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 40px;
+    }
+    
+    .restart {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        margin-top: 3rem;
+        button {
+            width: 300px;
+            height: 50px;
+            border: none;
+            background-color: rgb(79, 151, 192);
+            cursor: pointer;
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
+    }
+    
+    button {
+        font-size: 35px;
+        color: white;
     }

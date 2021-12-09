@@ -23,7 +23,9 @@ body {
     height: 115px;
     width: 131px;
     border: none;
-    background-color: #414672; }
+    background-color: #414672;
+    color: whitesmoke;
+    font-size: 40px; }
     .main button:hover {
       transform: scale(1.1); }
 
@@ -58,5 +60,36 @@ body {
     cursor: pointer; }
     .start button:hover {
       transform: scale(1.1); }
+
+.show {
+  display: inherit; }
+
+.hide {
+  display: none; }
+
+.whose-turn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 40px; }
+
+.restart {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  margin-top: 3rem; }
+  .restart button {
+    width: 300px;
+    height: 50px;
+    border: none;
+    background-color: #4f97c0;
+    cursor: pointer; }
+    .restart button:hover {
+      transform: scale(1.1); }
+
+button {
+  font-size: 35px;
+  color: white; }
 
 /*# sourceMappingURL=index.css.map */
