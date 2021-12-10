@@ -4,93 +4,44 @@ const player2ChoiceDOM = document.querySelector('.player-2');
 const startGameButton = document.querySelector('.start-game');
 const activePlayer = document.querySelector('.whose-turn');
 const restartGameButton = document.querySelector('.restart-game');
+const winner = document.querySelector('.winner');
 var count = 0;
 var checker_bool = false;
 var player1Choice = 'X';
 var player2Choice = 'O';
 
-const winningConditions = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
+const winningConditions = {
+    a: [0, 1, 2],
+    b: [3, 4, 5],
+    c: [6, 7, 8],
 
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
+    d: [0, 3, 6],
+    e: [1, 4, 7],
+    f: [2, 5, 8],
 
-    [0, 4, 8]
-    [2, 4, 6]
-];
+    g: [0, 4, 8],
+    h: [2, 4, 6]
+};
 
 
-const player1Win = [
-    [
-        []
-    ],
-    [
-        []
-    ],
-    [
-        []
-    ],
-    [
-        []
-    ],
-    [
-        []
-    ],
-    [
-        []
-    ],
-    [
-        []
-    ],
-    [
-        []
-    ],
-    [
-        []
-    ]
-]
+var player1Win = [];
 
-const player2Win = [
-    [
-        [],
-        []
-    ],
-    [
-        [],
-        []
-    ],
-    [
-        [],
-        []
-    ],
-    [
-        [],
-        []
-    ],
-    [
-        [],
-        []
-    ],
-    [
-        [],
-        []
-    ],
-    [
-        [],
-        []
-    ],
-    [
-        [],
-        []
-    ],
-    [
-        [],
-        []
-    ]
-]
+var player2Win = [];
+
+// to see if the winning condition is in the array
+const checkWhoWon = (playerWinCondition, whoWon) => {
+    for (const property in winningConditions) {
+        let result = winningConditions[property].every(j => playerWinCondition.includes(j));
+        console.log(result)
+        if (result) {
+            restartGame();
+            document.getElementById('modal-bg').classList.add('bg-active');
+            winner.innerHTML = `${whoWon} Won!!!`;
+            break;
+        }
+    }
+    return false;
+}
 
 // if true Player 1, if false player 2
 const checkWhoseTurnIsIt = () => {
@@ -149,7 +100,8 @@ const playerChoices = () => {
     const playerChoices = initializePlayers(actives[0].innerHTML, actives[1].innerHTML);
     player1Choice = playerChoices.player1Choice;
     player2Choice = playerChoices.player2Choice;
-}
+};
+
 
 
 
@@ -159,8 +111,16 @@ const playTicTacToe = (btns) => {
     count++;
     if (checkWhoseTurnIsIt()) {
         btns.innerHTML = player1Choice;
+        player1Win.push(parseInt(btns.value));
+        if (count >= 5) {
+            checkWhoWon(player1Win, 'Player 1');
+        };
     } else {
         btns.innerHTML = player2Choice;
+        player2Win.push(parseInt(btns.value));
+        if (count >= 5) {
+            checkWhoWon(player2Win, 'Player 2');
+        };
     };
     btns.replaceWith(btns.cloneNode(true));
 
@@ -183,6 +143,9 @@ const restartGame = () => {
     checker_bool = false;
     player1ChoiceDOM.addEventListener('click', playerChoices);
     player2ChoiceDOM.addEventListener('click', playerChoices);
+    count = 0;
+    player1Win = [];
+    player2Win = [];
 };
 
 
