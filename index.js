@@ -5,6 +5,7 @@ const startGameButton = document.querySelector('.start-game');
 const activePlayer = document.querySelector('.whose-turn');
 const restartGameButton = document.querySelector('.restart-game');
 const winner = document.querySelector('.winner');
+const choseButton = document.querySelectorAll('.chose-btn');
 var count = 0;
 var checker_bool = false;
 var player1Choice = 'X';
@@ -30,17 +31,26 @@ var player2Win = [];
 
 // to see if the winning condition is in the array
 const checkWhoWon = (playerWinCondition, whoWon) => {
+    if ((player1Win.length + player2Win.length) === 9) {
+        document.getElementById('modal-bg').classList.add('bg-active');
+        winner.innerHTML = `Its a Tie`;
+        restartGame();
+    }
     for (const property in winningConditions) {
         let result = winningConditions[property].every(j => playerWinCondition.includes(j));
-        console.log(result)
         if (result) {
-            restartGame();
             document.getElementById('modal-bg').classList.add('bg-active');
             winner.innerHTML = `${whoWon} Won!!!`;
+            restartGame();
             break;
         }
     }
     return false;
+};
+
+// sleep time expects milliseconds
+const sleep = (time) => {
+    return new Promise((resolve) => setTimeout(resolve, time));
 }
 
 // if true Player 1, if false player 2
@@ -55,17 +65,6 @@ const checkWhoseTurnIsIt = () => {
     return checker_bool;
 };
 
-const hideButton = () => {
-    startGameButton.parentElement.style.display = 'none';
-    allTheButtons.forEach((btns) => {
-        btns.addEventListener('click', () => playTicTacToe(btns));
-    });
-    activePlayer.innerHTML = "Player 1 turn...";
-    player1ChoiceDOM.removeEventListener('click', playerChoices);
-    player2ChoiceDOM.removeEventListener('click', playerChoices);
-    restartGameButton.parentElement.style.display = 'flex';
-};
-
 const initializePlayers = (player1Choice, player2Choice) => {
     const validateChoice = () => player1Choice === player2Choice ? false : true;
     const initializeChoice = () => {
@@ -77,6 +76,90 @@ const initializePlayers = (player1Choice, player2Choice) => {
         alert('Both player have the same choice!! No can do dumbo');
     }
 };
+
+
+//Starts the game
+const startGame = (btns) => {
+    btns.parentElement.style.display = 'none';
+    document.querySelector('.how').style.display = 'none';
+    allTheButtons[0].parentElement.parentElement.style.display = 'flex';
+    activePlayer.innerHTML = "Player 1 turn...";
+    player1ChoiceDOM.removeEventListener('click', playerChoices);
+    player2ChoiceDOM.removeEventListener('click', playerChoices);
+    restartGameButton.parentElement.style.display = 'flex';
+    if (((btns.innerHTML).split(' vs ')[1]).replace(/\s/g, "") === 'Player') {
+        allTheButtons.forEach((btns) => {
+            btns.addEventListener('click', () => playerVsPlayer(btns));
+        });
+    } else if (((btns.innerHTML).split(' vs ')[1]).replace(/\s/g, "") === 'Human') {
+        allTheButtons.forEach((btns) => {
+            btns.addEventListener('click', () => AI(btns));
+        });
+    }
+    // console.log(((btns.innerHTML).split(' vs ')[1]).replace(/\s/g, "") === 'Human')
+};
+
+
+//Player vs Player
+const playerVsPlayer = (btns) => {
+    allTheButtons = document.querySelectorAll('.btn');
+    count++;
+    if (checkWhoseTurnIsIt()) {
+        btns.innerHTML = player1Choice;
+        player1Win.push(parseInt(btns.value));
+        if (count >= 5) {
+            checkWhoWon(player1Win, 'Player 1');
+        };
+    } else {
+        btns.innerHTML = player2Choice;
+        player2Win.push(parseInt(btns.value));
+        if (count >= 5) {
+            checkWhoWon(player2Win, 'Player 2');
+        };
+    };
+    btns.replaceWith(btns.cloneNode(true));
+};
+
+
+// AI Logic
+async function AI(btns) {
+    allTheButtons = document.querySelectorAll('.btn');
+    count += 2;
+    btns.innerHTML = player1Choice;
+    player1Win.push(parseInt(btns.value));
+    if (count >= 5) {
+        checkWhoWon(player1Win, 'Player 1');
+        return;
+    };
+    btns.replaceWith(btns.cloneNode(true));
+
+
+
+    activePlayer.innerHTML = 'Computers turn.....';
+    await sleep(2000);
+    while (true) {
+        const random = Math.floor(Math.random() * (8 - 0 + 1) + 0);
+        if (player2Win.includes(random) || player1Win.includes(random)) {
+            continue;
+        } else {
+            let inner_count = 0
+            player2Win.push(parseInt(random));
+            await sleep(500);
+            allTheButtons.forEach((btns) => {
+                if (inner_count === random) {
+                    btns.innerHTML = player2Choice;
+                    btns.replaceWith(btns.cloneNode(true));
+                };
+                inner_count++;
+            });
+            checkWhoWon(player2Win, 'Computer');
+            break;
+        };
+    };
+    activePlayer.innerHTML = 'Player 1 turn....'
+};
+
+
 
 // Lets the user choose to either play with X or O.
 const playerChoices = () => {
@@ -105,31 +188,14 @@ const playerChoices = () => {
 
 
 
-// main function
-const playTicTacToe = (btns) => {
-    allTheButtons = document.querySelectorAll('.btn');
-    count++;
-    if (checkWhoseTurnIsIt()) {
-        btns.innerHTML = player1Choice;
-        player1Win.push(parseInt(btns.value));
-        if (count >= 5) {
-            checkWhoWon(player1Win, 'Player 1');
-        };
-    } else {
-        btns.innerHTML = player2Choice;
-        player2Win.push(parseInt(btns.value));
-        if (count >= 5) {
-            checkWhoWon(player2Win, 'Player 2');
-        };
-    };
-    btns.replaceWith(btns.cloneNode(true));
 
-};
-
+// restarts the game to its inital state
 const restartGame = () => {
     const actives = document.querySelectorAll('.active');
-    startGameButton.parentElement.style.display = 'flex';
+    choseButton[0].parentElement.style.display = 'flex';
     restartGameButton.parentElement.style.display = 'none';
+    allTheButtons[0].parentElement.parentElement.style.display = 'none';
+    document.querySelector('.how').style.display = 'inherit';
     activePlayer.innerHTML = '';
     allTheButtons.forEach((btns) => {
         btns.replaceWith(btns.cloneNode(true));
@@ -149,7 +215,11 @@ const restartGame = () => {
 };
 
 
-startGameButton.addEventListener('click', hideButton)
+
+// event listeneres
+choseButton.forEach((btns) => {
+    btns.addEventListener('click', () => startGame(btns));
+});
 player1ChoiceDOM.addEventListener('click', playerChoices);
 player2ChoiceDOM.addEventListener('click', playerChoices);
 restartGameButton.addEventListener('click', restartGame)
